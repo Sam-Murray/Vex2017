@@ -26,62 +26,9 @@
  * The autonomous task may exit, unlike operatorControl() which should never exit. If it does
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
-void driveForward(Robot r, int t){
-  r.Update(127, 127, 0, 0, 0,0, 0, 0, 0);
-  delay(t);
-  r.Update(0, 0, 0, 0, 0,0, 0, 0, 0);
-}
-void upSecond(Robot r, int t){
-  r.Update(0, 0, 0, 0, 0,0, 0, 1, 0);
-  delay(t);
-  r.Update(0, 0, 0, 0, 0,0, 0, 0, 0);
-}
-void downSecond(Robot r, int t){
-  r.Update(0, 0, 0, 0, 0,0, 0, 0, 1);
-  delay(t);
-  r.Update(0, 0, 0, 0, 0,0, 0, 0, 0);
-}
-void toggleClaw(Robot r){
-  r.Update(0, 0, 0, 0, 0,0, 1, 0, 0);
-}
+ 
 void autonomous() {
-  int Cpin=1;
-  int DRpin=2;
-  int DLpin=3;
-  int LRpin=4;
-  int LLpin=5;
-  int LURpin=6;
-  int LULpin=7;
-  int SLpin=9;
 
-  int Ipin=8;
-
-  Robot robot= Robot(DRpin, DLpin,LRpin,LLpin,LURpin,LULpin,Cpin,Ipin,SLpin, 1);
-
-  int upLiftTime=2000;
-  int downTime=900;
-  int driveTime=1500;
-  int t=0;
-  while(t<upLiftTime){
-    robot.SpecialUpdate(0, 0, 1, 0, 0,0, 1, 0, 0);
-    t++;
-    delay(1);
-
-  }
-  t=0;
-  while(t<driveTime){
-    robot.SpecialUpdate(127, 127, 0, 0, 0, 0, 1, 0, 0);
-    t++;
-    delay(1);
-
-  }
-  t=0;
-  while(t<downTime){
-    robot.SpecialUpdate(0, 0, 0, 1, 0,0, 0, 0, 0);
-    t++;
-    delay(1);
-  }
-  robot.SpecialUpdate(0, 0, 0, 0, 0,0, 0, 0, 0);
 
 }
   // upSecond(robot,upTime);

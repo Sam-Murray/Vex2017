@@ -55,73 +55,47 @@
    //   digitalWrite(9,false);
    // }
    //digitalWrite(9,false);
- #include "Robot.h"
-# include "API.h"
+# include "API.h" 
 
-void wackyautonomous() {
-  int Cpin=1;
-  int DRpin=2;
-  int DLpin=3;
-  int LRpin=4;
-  int LLpin=5;
-  int LURpin=6;
-  int LULpin=7;
-  int SLpin=9;
+void moveDrivetrain(int leftSpeed, int rightSpeed){
 
-  int Ipin=8;
+  motorSet(3, leftSpeed) ; // back left wheel moves
+  motorSet(3, leftSpeed) ; // front left wheel moves
 
-  Robot robot= Robot(DRpin, DLpin,LRpin,LLpin,LURpin,LULpin,Cpin,Ipin,SLpin, 1);
-
-  int upLiftTime=2000;
-  int downTime=900;
-  int driveTime=1500;
-  int t=0;
-  while(t<upLiftTime){
-    robot.SpecialUpdate(0, 0, 1, 0, 0,0, 1, 0, 0);
-    t++;
-    delay(1);
-
-  }
-  t=0;
-  while(t<driveTime){
-    robot.SpecialUpdate(127, 127, 0, 0, 0, 0, 1, 0, 0);
-    t++;
-    delay(1);
-
-  }
-  t=0;
-  while(t<downTime){
-    robot.SpecialUpdate(0, 0, 0, 1, 0,0, 0, 0, 0);
-    t++;
-    delay(1);
-  }
-  robot.SpecialUpdate(0, 0, 0, 0, 0,0, 0, 0, 0);
-
+  motorSet(2, -rightSpeed) ; // back right wheel moves
+  motorSet(2, -rightSpeed) ; // front right wheel moves
 
 }
-void operatorControl()
-{
 
-  // while(true){
-  //   if(joystickGetDigital(joystickSlot,6,JOY_DOWN){
-  //     wackyautonomous();
-  //   }
-  //
-  //
-  // }
-  int Cpin=1;
-  int DRpin=2;
-  int DLpin=3;
-  int LRpin=4;
-  int LLpin=5;
-  int LURpin=6;
-  int LULpin=7;
-  int SLpin=9;
+void moveLift(int liftSpeed){
 
-  int Ipin=8;
+  motorSet(4, liftSpeed) ; // left lift motor moves up or down
+  motorSet(5, liftSpeed) ; // right lift motor moves up or down
 
-  Robot robot= Robot(DRpin, DLpin,LRpin,LLpin,LURpin,LULpin,Cpin,Ipin,SLpin, 1);
-  while(true){
-    robot.Update(1);
-   }
+}
+
+void operatorControl() {
+
+  while (1){
+
+    int leftStickState = joystickGetAnalog(1, 3); //left stick forward/back (-127 to +127)
+    int rightStickState = joystickGetAnalog(1, 2); //right stick forward/back (-127 to +127)
+
+    moveDrivetrain(leftStickState, rightStickState);
+
+
+    bool rightTriggerTopState = joystickGetDigital(1, 6, JOY_UP); //is top right trigger pressed?
+    bool rightTriggerBottomState = joystickGetDigital(1, 6, JOY_DOWN); //is bottom right trigger pressed?
+
+    if(rightTriggerTopState){
+      moveLift(25);
+    } else if (rightTriggerBottomState){
+      moveLift(-25);
+    } else {
+      moveLift(0);
+    }
+
+
+      delay(20);
+  }
 }
